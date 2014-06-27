@@ -293,9 +293,9 @@ public class PatentParser {
 
 			}
 			
-			params.put("selected", "syxx");
+			params.put("selected", "xxsq");
 			int baseSize=sumFMGB+sumFMSQ;
-			for (int i = 0; i < sumPages - 1; i++) {
+			for (int i = 0; i < sumPages ; i++) {
 				params.put("pageNow", String.valueOf(++pageNow));
 				pageNow = Integer.valueOf(params.get("pageNow"));
 				request();
@@ -343,7 +343,7 @@ public class PatentParser {
 		
 			params.put("selected", "wgsq");
 			int baseSize=sumFMGB+sumFMSQ+sumSYXX;
-			for (int i = 0; i < sumPages - 1; i++) {
+			for (int i = 0; i < sumPages ; i++) {
 				params.put("pageNow", String.valueOf(++pageNow));
 				pageNow = Integer.valueOf(params.get("pageNow"));
 				request();
