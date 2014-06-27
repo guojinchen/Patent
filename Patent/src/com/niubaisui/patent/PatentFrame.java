@@ -159,7 +159,7 @@ public class PatentFrame extends JFrame {
 //        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jLabel6.setText("进度条");
 
-        jButton1.setText("抓取");
+        jButton1.setText("查询");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
@@ -312,20 +312,21 @@ public class PatentFrame extends JFrame {
     	
     	params="";
     	if(!shenqingri.equals("")){
-    		params=params+shenqingri_prefix+"'"+shenqingri+"'";
+    		params=params+shenqingri_prefix+"'"+shenqingri+"'"+" and ";
     	}
     	if(!gongkairi.equals("")){
-    		params=params+gongkairi_prefix+"'"+gongkairi+"'";
+    		params=params+gongkairi_prefix+"'"+gongkairi+"'"+" and ";
     	}
     	if(!shenqingren.equals("")){
-    		params=params+shenqingren_prefix+"'%"+shenqingren+"%'";
+    		params=params+shenqingren_prefix+"'%"+shenqingren+"%'"+" and ";
     	}
     	if(!dizhi.equals("")){
-    		params=params+dizhi_prefix+"'"+dizhi+"'";
+    		params=params+dizhi_prefix+"'"+dizhi+"'"+" and ";
     	}
     	if(!dailijigou.equals("")){
-    		params=params+dailijigou_prefix+"'"+dailijigou+"'";
+    		params=params+dailijigou_prefix+"'"+dailijigou+"'"+" and ";
     	}
+    	params=params.substring(0, params.length()-5);
     	System.out.println(params);
     	jButton1.setEnabled(false);
     	

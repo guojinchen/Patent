@@ -5,6 +5,8 @@ package com.niubaisui.patent;
 
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import org.apache.http.client.ClientProtocolException;
 import org.htmlparser.util.ParserException;
 
@@ -24,10 +26,14 @@ public class ThreadPatent extends Thread{
 	@Override
 	public void run(){
 		
+		String filename=JOptionPane.showInputDialog(frame, "请输入文件名：");
+		if(filename.equals("")){
+			filename="inputfilename";
+		}
 		PatentParser parser=new PatentParser(frame.getNumFMGB(), frame.getNumFMSQ(), frame.getNumSYXX(), frame.getNumWGSQ(), frame.getParams());
 		parser.valide();
 		try {
-			parser.parser("niubaisui.txt", frame);
+			parser.parser(filename+".txt", frame);
 			frame.getjButton1().setEnabled(true);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

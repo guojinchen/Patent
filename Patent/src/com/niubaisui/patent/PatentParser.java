@@ -146,6 +146,7 @@ public class PatentParser {
 	
 	public void parser(String filename,PatentFrame frame) throws ClientProtocolException, IOException, ParserException{
 		request();
+		content="";
 		String numFMGB=params.get("numFMGB").replaceAll("\\s", "");
 		String numFMSQ=params.get("numFMSQ").replaceAll("\\s", "");
 		String numSYXX=params.get("numSYXX").replaceAll("\\s", "");
@@ -163,38 +164,217 @@ public class PatentParser {
 		if(!numWGSQ.equals("")){
 			sumWGSQ=Integer.valueOf(numWGSQ);
 		}	
-		
 		sum=sumFMGB+sumFMSQ+sumSYXX+sumWGSQ;
-		int pageSize=Integer.valueOf(params.get("pageSize"));
-		int pageNow=Integer.valueOf(params.get("pageNow"));
-		if(sum<pageSize){
-			sumPages=1;
-		}
-		else{
-			sumPages=sum/pageSize;
-		}
 		
-		if(sum%pageSize!=0){
-			if(sum>pageSize){
-				sumPages++;
+		
+		
+		/*
+		 * 处理fmgb查询
+		 */
+		if (sumFMGB > 0) {
+			// 得到pageNow和sumPages
+			int pageSize = Integer.valueOf(params.get("pageSize"));
+			int pageNow = 0;
+			if (sumFMGB < pageSize) {
+				sumPages = 1;
+			} else {
+				sumPages = sumFMGB/ pageSize;
+			}
+
+			if (sumFMGB% pageSize != 0) {
+				if (sumFMGB > pageSize) {
+					sumPages++;
+				}
+
 			}
 			
+			
+			//设置参数
+			params.put("selected", "fmgb");
+			for (int i = 0; i < sumPages; i++) {
+				params.put("pageNow", String.valueOf(++pageNow));
+				pageNow = Integer.valueOf(params.get("pageNow"));
+				request();
+				
+				int nowSize=0;
+				if(sumPages==1){
+					nowSize=sumFMGB;
+				}
+				if(i==(sumPages-1)){
+					if(sumFMGB%pageSize!=0){
+						nowSize=sumFMGB;
+					}
+				}
+				else{
+					nowSize=pageNow*pageSize;
+				}
+				frame.getTextArea().setText(content);
+				double ratio = (double) (nowSize) / (double) sum;
+				frame.getProgress().setValue((int) (ratio * 100));
+				frame.getjLabel6().setText(String.valueOf(nowSize) + "/"+ String.valueOf(sum));
+			}
 		}
-		//
-		frame.getTextArea().setText(content);
-		double ratio=(double)pageNow/(double)sumPages;
-		frame.getProgress().setValue((int)(ratio*100));
-		frame.getjLabel6().setText(String.valueOf(pageNow)+"/"+String.valueOf(sumPages));
-		for(int i=0;i<sumPages-1;i++){
-			params.put("pageNow", String.valueOf(++pageNow));
-			pageNow=Integer.valueOf(params.get("pageNow"));
-			request();
-			frame.getTextArea().setText(content);
-			ratio=(double)pageNow/(double)sumPages;
-			frame.getProgress().setValue((int)(ratio*100));
-			frame.getjLabel6().setText(String.valueOf(pageNow)+"/"+String.valueOf(sumPages));
+
+		
+		
+		
+		
+		
+		
+		/*
+		 * 处理fmsq查询
+		 */
+		if (sumFMSQ > 0) {
+			// 得到pageNow和sumPages
+			int pageSize = Integer.valueOf(params.get("pageSize"));
+			int pageNow=0;
+			if (sumFMSQ < pageSize) {
+				sumPages = 1;
+			} else {
+				sumPages = sumFMSQ / pageSize;
+			}
+
+			if (sumFMSQ % pageSize != 0) {
+				if (sumFMSQ > pageSize) {
+					sumPages++;
+				}
+
+			}
+			
+			
+			params.put("selected", "fmsq");
+			int baseSize=sumFMGB;
+			for (int i = 0; i < sumPages; i++) {
+				params.put("pageNow", String.valueOf(++pageNow));
+				pageNow = Integer.valueOf(params.get("pageNow"));
+				request();
+				
+				
+				/*
+				 * 确定以获取的条数
+				 */
+				int nowSize=0;
+				if(sumPages==1){
+					nowSize=baseSize+sumFMSQ;
+				}
+				if(i==(sumPages-1)){
+					if(sumFMSQ%pageSize!=0){
+						nowSize=baseSize+sumFMSQ;
+					}
+				}
+				else{
+					nowSize=pageNow*pageSize+baseSize;
+				}
+				frame.getTextArea().setText(content);
+				double ratio = (double) (nowSize) / (double) sum;
+				frame.getProgress().setValue((int) (ratio * 100));
+				frame.getjLabel6().setText(String.valueOf(nowSize) + "/"+ String.valueOf(sum));
+			}
 		}
 		
+		/*
+		 * 处理syxx查询
+		 */
+		
+		if (sumSYXX > 0) {
+			// 得到pageNow和sumPages
+			int pageSize = Integer.valueOf(params.get("pageSize"));
+			int pageNow = 0;
+			if (sumSYXX < pageSize) {
+				sumPages = 1;
+			} else {
+				sumPages = sumSYXX / pageSize;
+			}
+
+			if (sumSYXX % pageSize != 0) {
+				if (sumSYXX > pageSize) {
+					sumPages++;
+				}
+
+			}
+			
+			params.put("selected", "syxx");
+			int baseSize=sumFMGB+sumFMSQ;
+			for (int i = 0; i < sumPages - 1; i++) {
+				params.put("pageNow", String.valueOf(++pageNow));
+				pageNow = Integer.valueOf(params.get("pageNow"));
+				request();
+				
+				/*
+				 * 确定以获取的条数
+				 */
+				int nowSize=baseSize;
+				if(sumPages==1){
+					nowSize=baseSize+sumSYXX;
+				}
+				if(i==(sumPages-1)){
+					if(sumSYXX%pageSize!=0){
+						nowSize=baseSize+sumSYXX;
+					}
+				}
+				else{
+					nowSize=pageNow*pageSize+baseSize;
+				}
+				frame.getTextArea().setText(content);
+				double ratio = (double) (nowSize) / (double) sum;
+				frame.getProgress().setValue((int) (ratio * 100));
+				frame.getjLabel6().setText(String.valueOf(nowSize) + "/"+ String.valueOf(sum));
+			}
+		}
+		/*
+		 * 处理wgsq查询
+		 */
+		if (sumWGSQ > 0) {
+			// 得到pageNow和sumPages
+			int pageSize = Integer.valueOf(params.get("pageSize"));
+			int pageNow = 0;
+			if (sumWGSQ < pageSize) {
+				sumPages = 1;
+			} else {
+				sumPages = sumWGSQ / pageSize;
+			}
+
+			if (sumWGSQ % pageSize != 0) {
+				if (sumWGSQ > pageSize) {
+					sumPages++;
+				}
+
+			}
+		
+			params.put("selected", "wgsq");
+			int baseSize=sumFMGB+sumFMSQ+sumSYXX;
+			for (int i = 0; i < sumPages - 1; i++) {
+				params.put("pageNow", String.valueOf(++pageNow));
+				pageNow = Integer.valueOf(params.get("pageNow"));
+				request();
+				
+				/*
+				 * 确定以获取的条数
+				 */
+				int nowSize=baseSize;
+				if(sumPages==1){
+					nowSize=sumWGSQ+baseSize;
+				}
+				if(i==(sumPages-1)){
+					if(sumFMSQ%pageSize!=0){
+						nowSize=sumWGSQ+baseSize;
+					}
+				}
+				else{
+					nowSize=pageNow*pageSize+baseSize;
+				}
+				
+				
+				frame.getTextArea().setText(content);
+				double ratio = (double) (nowSize) / (double) sum;
+				frame.getProgress().setValue((int) (ratio * 100));
+				frame.getjLabel6().setText(String.valueOf(nowSize) + "/"+ String.valueOf(sum));
+			}
+		}
+		
+		frame.getTextArea().setText(content);
+		frame.getProgress().setValue(100);
+		frame.getjLabel6().setText(String.valueOf(sum)+"/"+String.valueOf(sum));
 		//写入文件中
 		File file=new File(filename);
 		FileWriter writer=new FileWriter(file);
