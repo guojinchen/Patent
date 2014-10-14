@@ -68,11 +68,7 @@ public class HospitalParser {
 		}
 		return str;
 	}
-//	provinceId:7180
-//	htype:
-//	hgrade:
-//	hclass:
-//	hname:
+
 	public Map<String,String> makeRequestHeader(String province){
 		Map<String,String> params=new HashMap<String,String>();
 		params.put("provinceId", province);
@@ -86,7 +82,6 @@ public class HospitalParser {
 		List<Hospital>  hospitals=new ArrayList<Hospital>();
 		
 		String str=request(url, params);
-		System.out.println(str);
 		JSONArray array=new JSONArray(str);
 		for(int i=0;i<array.length();i++){
 			Hospital hospital=new Hospital();
@@ -117,12 +112,18 @@ public class HospitalParser {
 		return provinces;
 		
 	}
+	/*
+	 *  new Array("北京市","天津市","河北省","山西省","内蒙古自治区","辽宁省","吉林省","黑龙江省","上海市",
+	 *  "江苏省","浙江省","安徽省","福建省","江西省","山东省","河南省","湖北省","湖南省","广东省","广西壮族自治区",
+	 *  "海南省","重庆市","四川省","贵州省","云南省","西藏自治区","陕西省","甘肃省","青海省","宁夏回族自治区","新疆维吾尔自治区","新疆生产建设兵团");
+	 *  7180
+	 */
 	public static void main(String[] argv) throws ClientProtocolException, ParserException, IOException {
 		HospitalParser  parser=new HospitalParser();
 		String str=parser.request("https://www.hqms.org.cn/usp/roster/index.jsp",new HashMap<String,String>());
 		Map<String,String> provinces=parser.parserProvince(str);
-		System.out.println(provinces.get("7238"));
-		Map<String,String> params=parser.makeRequestHeader("7238");
+		System.out.println(provinces.get("7224"));
+		Map<String,String> params=parser.makeRequestHeader("7224");
 		parser.parserHospital("https://www.hqms.org.cn/usp/roster/rosterInfo.jsp", params);
 	}
 }
