@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,8 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.niubaisui.baiduComputing.Computing;
 
 /**
  * @author niubaisui
@@ -104,8 +107,6 @@ public class HospitalParser {
 			for(int j=1;j<childlist.size();j++){
 				Node n=childlist.elementAt(j);
 				String number=n.getText().replace("\"", "").replace("option value=", "");
-//				System.out.println(number);
-//				System.out.println(n.toPlainTextString());
 				provinces.put(number,n.toPlainTextString());
 			}
 		}
@@ -118,12 +119,26 @@ public class HospitalParser {
 	 *  "海南省","重庆市","四川省","贵州省","云南省","西藏自治区","陕西省","甘肃省","青海省","宁夏回族自治区","新疆维吾尔自治区","新疆生产建设兵团");
 	 *  7180
 	 */
-	public static void main(String[] argv) throws ClientProtocolException, ParserException, IOException {
+	public static void main(String[] argv) throws Exception {
 		HospitalParser  parser=new HospitalParser();
 		String str=parser.request("https://www.hqms.org.cn/usp/roster/index.jsp",new HashMap<String,String>());
 		Map<String,String> provinces=parser.parserProvince(str);
 		System.out.println(provinces.get("7224"));
 		Map<String,String> params=parser.makeRequestHeader("7224");
-		parser.parserHospital("https://www.hqms.org.cn/usp/roster/rosterInfo.jsp", params);
+		List<Hospital> hospitals=parser.parserHospital("https://www.hqms.org.cn/usp/roster/rosterInfo.jsp", params);
+		Computing computing=new Computing();
+		List<Long> caculate=new ArrayList<Long>();
+		for(Hospital hospital:hospitals){
+			System.out.println(hospital.getName());
+			String s=computing.getComputing(hospital.getName());
+			hospital.setComputing(Long.valueOf(s));
+			caculate.add(Long.valueOf(s));
+		}
+		Collections.sort(caculate);
+		Collections.sort(hospitals,new Hospital());
+		for(Hospital hospital: hospitals){
+			System.out.println(hospital.getName()+">>>"+hospital.getComputing());
+		}
+		System.out.println(hospitals.size());
 	}
 }
