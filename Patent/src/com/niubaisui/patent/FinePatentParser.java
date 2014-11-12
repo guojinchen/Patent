@@ -3,10 +3,6 @@
  */
 package com.niubaisui.patent;
 
-/**
- * @author Administrator
- *
- */
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,7 +37,7 @@ import org.htmlparser.util.ParserException;
  * @author 12169_000
  *
  */
-public class PatentParser {
+public class FinePatentParser {
 
 	/*
 	 * strWord:申请日='2012.06.13'
@@ -59,8 +55,9 @@ public class PatentParser {
 	private int sum;
 	private int sumPages;
 	private Map<String,String> params=new HashMap<String,String>();
+	
 	private String url="http://epub.sipo.gov.cn/patentoutline.action";
-	public PatentParser(){
+	public FinePatentParser(){
 		params.put("showType", "1");;
 		params.put("strWord", "申请日='2012.06.13'");
 		params.put("numSortMethod", "");
@@ -73,8 +70,8 @@ public class PatentParser {
 		params.put("pageSize", "10");
 		params.put("pageNow", "1");
 	}
-	public PatentParser(String numFMGB,String numFMSQ,String numSYXX,String numWGSQ,String strWord){
-		
+	
+	public FinePatentParser(String numFMGB,String numFMSQ,String numSYXX,String numWGSQ,String strWord){
 		
 		params.put("showType", "1");;
 		params.put("strWord", strWord);
@@ -90,6 +87,17 @@ public class PatentParser {
 		
 	}
 	
+	
+	public void fine_request(){
+		for(int i=0;i<10;i++){
+			try{
+				request();
+				break;
+			}catch(Exception e){
+				continue;
+			}
+		}
+	}
 	public void request() throws ClientProtocolException, IOException, ParserException{
 		HttpClient client=HttpClients.createDefault();
 		HttpPost httppost=new HttpPost(url);
@@ -145,7 +153,7 @@ public class PatentParser {
 	}
 	
 	public void parser(String filename,PatentFrame frame) throws ClientProtocolException, IOException, ParserException{
-		request();
+		fine_request();
 		content="";
 		String numFMGB=params.get("numFMGB").replaceAll("\\s", "");
 		String numFMSQ=params.get("numFMSQ").replaceAll("\\s", "");
@@ -194,7 +202,7 @@ public class PatentParser {
 			for (int i = 0; i < sumPages; i++) {
 				params.put("pageNow", String.valueOf(++pageNow));
 				pageNow = Integer.valueOf(params.get("pageNow"));
-				request();
+				fine_request();
 				
 				int nowSize=0;
 				if(sumPages==1){
@@ -247,7 +255,7 @@ public class PatentParser {
 			for (int i = 0; i < sumPages; i++) {
 				params.put("pageNow", String.valueOf(++pageNow));
 				pageNow = Integer.valueOf(params.get("pageNow"));
-				request();
+				fine_request();
 				
 				
 				/*
@@ -298,7 +306,7 @@ public class PatentParser {
 			for (int i = 0; i < sumPages ; i++) {
 				params.put("pageNow", String.valueOf(++pageNow));
 				pageNow = Integer.valueOf(params.get("pageNow"));
-				request();
+				fine_request();
 				
 				/*
 				 * 确定以获取的条数
@@ -346,7 +354,7 @@ public class PatentParser {
 			for (int i = 0; i < sumPages ; i++) {
 				params.put("pageNow", String.valueOf(++pageNow));
 				pageNow = Integer.valueOf(params.get("pageNow"));
-				request();
+				fine_request();
 				
 				/*
 				 * 确定以获取的条数
@@ -421,7 +429,7 @@ public class PatentParser {
 		}
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, ParserException {
-		PatentParser parser=new PatentParser();
+		FinePatentParser parser=new FinePatentParser();
 		
 		//parser.request();
 		parser.parser("test.txt",null);

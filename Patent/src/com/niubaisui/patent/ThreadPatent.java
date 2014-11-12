@@ -30,8 +30,8 @@ public class ThreadPatent extends Thread{
 		if(filename.equals("")){
 			filename="inputfilename";
 		}
-		PatentParser parser=new PatentParser(frame.getNumFMGB(), frame.getNumFMSQ(), frame.getNumSYXX(), frame.getNumWGSQ(), frame.getParams());
-		parser.valide();
+		FinePatentParser parser=new FinePatentParser(frame.getNumFMGB(), frame.getNumFMSQ(), frame.getNumSYXX(), frame.getNumWGSQ(), frame.getParams());
+		//parser.valide();
 		try {
 			parser.parser(filename+".txt", frame);
 			frame.getjButton1().setEnabled(true);
