@@ -34,11 +34,12 @@ public class ThreadDetails extends Thread{
 		int i=0;
 		for(String s:content){
 			try{
-				String ss=s.replace(".", "").substring(0, 13);
+				String ss=s.replace(".", "");
+				ss=ss.split(",")[0];
 				PatentDetailedParser parser=new PatentDetailedParser(ss);
 				parser.fine_request();
 				parser.parser();
-				System.out.println(s);
+				System.out.println(ss);
 				System.out.println(s+"    "+parser.getContent());
 				SearchFrame.addContent(s+"  "+parser.getContent()+"\r\n");
 				i++;

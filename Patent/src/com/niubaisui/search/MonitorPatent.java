@@ -52,8 +52,10 @@ public class MonitorPatent extends Thread{
 					e.printStackTrace();
 				} 
 				frame.getjProgressBar1().setBackground(Color.CYAN);
+				frame.getjTextArea1().setText(SearchFrame.getContent());
         		frame.getjProgressBar1().setValue(100);
         		isCreate=true;
+        		break;
         	}
         	else{
 //        		System.out.println("threadnum:"+SearchFrame.threadnum);

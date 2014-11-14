@@ -111,6 +111,7 @@ public class SearchFrame extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.copy();
         jScrollPane1.setViewportView(jTextArea1);
         jButton1.setText("打开");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
