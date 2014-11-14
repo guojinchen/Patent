@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -88,15 +89,18 @@ public class FinePatentParser {
 	}
 	
 	
-	public void fine_request(){
-		for(int i=0;i<10;i++){
+	public boolean  fine_request(){
+		for(int i=0;i<20;i++){
 			try{
 				request();
-				break;
+				return true;
+				
 			}catch(Exception e){
 				continue;
 			}
 		}
+		
+		return false;
 	}
 	public void request() throws ClientProtocolException, IOException, ParserException{
 		HttpClient client=HttpClients.createDefault();
@@ -152,7 +156,7 @@ public class FinePatentParser {
 		}		
 	}
 	
-	public void parser(String filename,PatentFrame frame) throws ClientProtocolException, IOException, ParserException{
+	public void parser(String filename,PatentFrame frame) throws Exception{
 		fine_request();
 		content="";
 		String numFMGB=params.get("numFMGB").replaceAll("\\s", "");
@@ -388,8 +392,28 @@ public class FinePatentParser {
 		FileWriter writer=new FileWriter(file);
 		writer.write(content);
 		writer.close();	
+		
+		
+		generateDetail(filename);
 	}
 	
+	
+	public void generateDetail(String filename) throws Exception{
+		String splits[]=content.split("\r\n");
+		String details="";
+		for(String s:splits){
+			String ss=s.replace(".", "");
+			PatentDetailedParser parser=new PatentDetailedParser(ss);
+			parser.fine_request();
+			parser.parser();
+			details=details+s+"  "+parser.getContent()+"\r\n";
+		}
+		File file=new File("details"+filename);
+		FileWriter writer=new FileWriter(file);
+		writer.write(details);
+		writer.close();	
+		
+	}
 	
 	public int getSum(){
 		return sum;
@@ -424,11 +448,11 @@ public class FinePatentParser {
 		Calendar calendar=Calendar.getInstance();
 		int month=calendar.get(Calendar.MONTH);
 		System.out.println(month);
-		if(month>5){
+		if(month>11){
 			System.exit(0);
 		}
 	}
-	public static void main(String[] args) throws ClientProtocolException, IOException, ParserException {
+	public static void main(String[] args) throws Exception {
 		FinePatentParser parser=new FinePatentParser();
 		
 		//parser.request();

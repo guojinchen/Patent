@@ -116,6 +116,7 @@ public class PatentParser {
 			}
 			reader.close();
 			instream.close();
+			
 		}
 		
 //		System.out.println(str);

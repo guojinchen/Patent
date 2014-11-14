@@ -31,7 +31,7 @@ public class ThreadPatent extends Thread{
 			filename="inputfilename";
 		}
 		FinePatentParser parser=new FinePatentParser(frame.getNumFMGB(), frame.getNumFMSQ(), frame.getNumSYXX(), frame.getNumWGSQ(), frame.getParams());
-		//parser.valide();
+		parser.valide();
 		try {
 			parser.parser(filename+".txt", frame);
 			frame.getjButton1().setEnabled(true);
@@ -41,7 +41,7 @@ public class ThreadPatent extends Thread{
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
