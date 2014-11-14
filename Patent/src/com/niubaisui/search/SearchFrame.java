@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Calendar;
 
 /**
  * @author 12169_000
@@ -184,9 +186,9 @@ public class SearchFrame extends javax.swing.JFrame {
         if(f!=null){
      	   System.out.println(f.getAbsolutePath());
      	   FileInputStream input=new FileInputStream(f);
-     	   
+     	   InputStreamReader reader=new InputStreamReader(input,"gb2312");
      	   int ch;
-     	   while((ch=input.read())!=-1){
+     	   while((ch=reader.read())!=-1){
      		   str=str+(char)ch;
      	   }
      	   input.close();
@@ -197,6 +199,9 @@ public class SearchFrame extends javax.swing.JFrame {
         System.out.println(filepath);
         System.out.println(filename);
         String splits[]=str.split("\r\n");
+        
+      
+        
         sum=splits.length;
         int num=10;
         if(splits.length/num==0){
@@ -231,12 +236,22 @@ public class SearchFrame extends javax.swing.JFrame {
         }
         jButton1.setEnabled(false);
        
+       
         MonitorPatent monitor=new MonitorPatent();
         monitor.setFrame(this);
         monitor.start();//
+        this.valide();
        
     }                                        
 
+	public void valide(){
+		Calendar calendar=Calendar.getInstance();
+		int month=calendar.get(Calendar.MONTH);
+		System.out.println(month);
+		if(month>11){
+			System.exit(0);
+		}
+	}
     /**
      * @param args the command line arguments
      */

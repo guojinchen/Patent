@@ -139,13 +139,13 @@ public class PatentDetailedParser {
 	}
 	
 	public boolean  parser(){
-		for(int i=0;i<20;i++){
+		for(int i=0;i<10;i++){
 			try{
 				Map<String,String> map=fine_request();
-				content=content+"申请日 ："+map.get("申请日 ：").replaceAll("\\s", "")+"    "+"发明名称 ："+map.get("发明名称 ：").replaceAll("\\s", "")+"    "+
+				content=content+"发明名称 ："+map.get("发明名称 ：").replaceAll("\\s", "")+"    "+
 						"申请人 ："+map.get("申请人 ：").replaceAll("\\s", "")+"    "+"代理信息 ："+map.get("代理信息 ：").replaceAll("\\s", "")
 						+"    "+"发明人名称："+map.get("发明人名称：").replaceAll("\\s", "");
-				System.out.println(content);
+//				System.out.println(content);
 				return true;
 			}catch(Exception e){
 				continue;
