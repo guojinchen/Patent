@@ -241,7 +241,6 @@ public class SearchFrame extends javax.swing.JFrame {
         MonitorPatent monitor=new MonitorPatent();
         monitor.setFrame(this);
         monitor.start();//
-        this.valide();
        
     }                                        
 

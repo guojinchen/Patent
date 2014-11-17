@@ -52,6 +52,7 @@ public class MonitorPatent extends Thread{
 					e.printStackTrace();
 				} 
 				frame.getjProgressBar1().setBackground(Color.CYAN);
+				frame.getjLabel1().setText(String.valueOf(current)+"/"+String.valueOf(frame.getSum()));
 				frame.getjTextArea1().setText(SearchFrame.getContent());
         		frame.getjProgressBar1().setValue(100);
         		isCreate=true;
